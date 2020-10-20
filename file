@@ -1,0 +1,130 @@
+classdef app7 < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure                     matlab.ui.Figure
+        ChooseDropDownLabel          matlab.ui.control.Label
+        ChooseDropDown               matlab.ui.control.DropDown
+        SelectedvalueEditFieldLabel  matlab.ui.control.Label
+        SelectedvalueEditField       matlab.ui.control.EditField
+        ChooseDropDown_2Label        matlab.ui.control.Label
+        ChooseDropDown_2             matlab.ui.control.DropDown
+        ShowButton                   matlab.ui.control.Button
+        ValueEditFieldLabel          matlab.ui.control.Label
+        ValueEditField               matlab.ui.control.EditField
+    end
+
+
+    properties (Access = public)
+        value1=""; % Description
+    end
+
+
+    methods (Access = private)
+
+        % Value changed function: ChooseDropDown
+        function ChooseDropDownValueChanged(app, event)
+            value = app.ChooseDropDown.Value;
+            app.SelectedvalueEditField.Value=value;
+        end
+
+        % Button pushed function: ShowButton
+        function ShowButtonPushed(app, event)
+            app.ValueEditField.Value=app.value1;
+        end
+
+        % Value changed function: ChooseDropDown_2
+        function ChooseDropDown_2ValueChanged(app, event)
+            app.value1 = app.ChooseDropDown_2.Value;   
+        end
+    end
+
+    % App initialization and construction
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure
+            app.UIFigure = uifigure;
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'UI Figure';
+
+            % Create ChooseDropDownLabel
+            app.ChooseDropDownLabel = uilabel(app.UIFigure);
+            app.ChooseDropDownLabel.HorizontalAlignment = 'right';
+            app.ChooseDropDownLabel.Position = [58 408 50 22];
+            app.ChooseDropDownLabel.Text = 'Choose:';
+
+            % Create ChooseDropDown
+            app.ChooseDropDown = uidropdown(app.UIFigure);
+            app.ChooseDropDown.Items = {'Web programming', 'C++ programming', 'Bla bla', 'Option 4'};
+            app.ChooseDropDown.ValueChangedFcn = createCallbackFcn(app, @ChooseDropDownValueChanged, true);
+            app.ChooseDropDown.Position = [123 408 100 22];
+            app.ChooseDropDown.Value = 'Web programming';
+
+            % Create SelectedvalueEditFieldLabel
+            app.SelectedvalueEditFieldLabel = uilabel(app.UIFigure);
+            app.SelectedvalueEditFieldLabel.HorizontalAlignment = 'right';
+            app.SelectedvalueEditFieldLabel.Position = [264 408 84 22];
+            app.SelectedvalueEditFieldLabel.Text = 'Selected value';
+
+            % Create SelectedvalueEditField
+            app.SelectedvalueEditField = uieditfield(app.UIFigure, 'text');
+            app.SelectedvalueEditField.Position = [363 408 152 22];
+
+            % Create ChooseDropDown_2Label
+            app.ChooseDropDown_2Label = uilabel(app.UIFigure);
+            app.ChooseDropDown_2Label.HorizontalAlignment = 'right';
+            app.ChooseDropDown_2Label.Position = [64 341 50 22];
+            app.ChooseDropDown_2Label.Text = 'Choose:';
+
+            % Create ChooseDropDown_2
+            app.ChooseDropDown_2 = uidropdown(app.UIFigure);
+            app.ChooseDropDown_2.Items = {'PHP programming', 'Laravel programming', 'NodeJS', 'Option 4'};
+            app.ChooseDropDown_2.ValueChangedFcn = createCallbackFcn(app, @ChooseDropDown_2ValueChanged, true);
+            app.ChooseDropDown_2.Position = [129 341 100 22];
+            app.ChooseDropDown_2.Value = 'PHP programming';
+
+            % Create ShowButton
+            app.ShowButton = uibutton(app.UIFigure, 'push');
+            app.ShowButton.ButtonPushedFcn = createCallbackFcn(app, @ShowButtonPushed, true);
+            app.ShowButton.Position = [248 341 100 22];
+            app.ShowButton.Text = 'Show';
+
+            % Create ValueEditFieldLabel
+            app.ValueEditFieldLabel = uilabel(app.UIFigure);
+            app.ValueEditFieldLabel.HorizontalAlignment = 'right';
+            app.ValueEditFieldLabel.Position = [402 341 35 22];
+            app.ValueEditFieldLabel.Text = 'Value';
+
+            % Create ValueEditField
+            app.ValueEditField = uieditfield(app.UIFigure, 'text');
+            app.ValueEditField.Position = [452 341 100 22];
+        end
+    end
+
+    methods (Access = public)
+
+        % Construct app
+        function app = app7
+
+            % Create and configure components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
